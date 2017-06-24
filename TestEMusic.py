@@ -1,12 +1,14 @@
+from __future__ import print_function
 import time 
 import requests
 import cv2
 import operator
 import pandas as pd
 import numpy as np
-from __future__ import print_function
 
 # Import library to display results
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 # Display images within Jupyter
@@ -129,4 +131,4 @@ for i in range(len(list_all_emotions)):
 # Append to the list with all dictionaries
 list_dict_emotions.append(dict_emotions)
 
-print dict_emotions
+print(dict_emotions)
