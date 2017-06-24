@@ -11,9 +11,10 @@ def hello_world():
     return render_template('index.html', data='test')
 
 @app.route('/live-data')
-def live_data():
-    # Create a PHP array and echo it as JSON
-    data = [time() * 1000, random() * 100]
+def live_data(data_dict):
+    # Gets a dictionary and echoes its values as JSON
+    print "Works! " + data_dict['happiness']
+    data = [time() * 1000, data_dict['happiness']]
     response = make_response(json.dumps(data))
     response.content_type = 'application/json'
     return response

@@ -4,6 +4,7 @@ import time
 import ast
 from get_face import get_attributes
 import cognitive_face as CF
+from  flask_live_charts/flask_live_charts import live_data
 
 logger = logging.getLogger()
 hdlr = logging.FileHandler('./log.log')
@@ -86,7 +87,11 @@ class VideoCamera(object):
         
         if len(out_dict) > 0:
             print "Persisted prediction"
-            print self.get_confidence(time_steps=steps, allEmotions=out_dict)
+            emotions_dict = self.get_confidence(time_steps=steps, allEmotions=out_dict)
+
+            # Visulises the mood. 
+            live_data(emotions_dict)
+
 
 
 
