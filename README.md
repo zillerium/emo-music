@@ -11,3 +11,6 @@ scc
 sp = spotipy.Spotify(client_credentials_manager = scc)
 results = sp.artist_top_tracks('spotify:artist:36QJpDe2go2KgaRleHCDTp')
 ```
+
+updating line chart for displaying the emotions over time
+https://github.com/tdiethe/flask-live-charts.git
