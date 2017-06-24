@@ -129,4 +129,4 @@ for i in range(len(list_all_emotions)):
 # Append to the list with all dictionaries
 list_dict_emotions.append(dict_emotions)
 
-print dict_emotions
+print(dict_emotions)
