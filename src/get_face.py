@@ -45,8 +45,6 @@ def get_attributes(image):
         response = conn.getresponse()
         data = response.read()
 
-        print ("Response:")
-        print(data)
         return data
         conn.close()
 
