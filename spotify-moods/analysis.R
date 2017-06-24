@@ -3,7 +3,7 @@ theme_set(theme_bw(14))
 library(RSQLite)
 library(dplyr)
 
-DATAPATH <- "~/tmp/"
+DATAPATH <- "./data.db"
 
 #### Functions ####
 getStats <- function(db) {
