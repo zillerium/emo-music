@@ -5,6 +5,7 @@ import cv2
 import operator
 import pandas as pd
 import numpy as np
+import http.client, urllib.request, urllib.parse, urllib.error, base64
 
 # Import library to display results
 import matplotlib
@@ -99,7 +100,7 @@ class GetImageSentiment:
             
         return face_expressions
 
-    headers = dict()
+    """headers = dict()
     headers['Ocp-Apim-Subscription-Key'] = _key
     headers['Content-Type'] = 'application/json' 
 
@@ -118,14 +119,41 @@ class GetImageSentiment:
 
         ig, ax = plt.subplots(figsize=(15, 20))
         ax.imshow(img)
+    """
+
+    headers = {
+        # Request headers
+        'Content-Type': 'application/octet-stream',
+        'Ocp-Apim-Subscription-Key': 'cc2b2790ff6c41688925e9778b1cd58e',
+    }
+
+    params = urllib.parse.urlencode({
+    })
+
+    # Replace the example URL below with the URL of the image you want to analyze.
+    #body = "{ 'url': 'http://example.com/picture.jpg' }"
+    _, jpeg = cv2.imencode('.jpg', img)
+    body=jpeg.tobytes()
+    try:
+        # NOTE: You must use the same region in your REST call as you used to obtain your subscription keys.
+        #   For example, if you obtained your subscription keys from westcentralus, replace "westus" in the 
+        #   URL below with "westcentralus".
+        conn = http.client.HTTPSConnection('westus.api.cognitive.microsoft.com')
+        conn.request("POST", "/emotion/v1.0/recognize?%s" % params, body, headers)
+        response = conn.getresponse()
+        data = response.read()
+        get_confidence(10, data)
+        conn.close()
+    except Exception as e:
+        print(e.args)
 
 
 
-    def get_confidence():
+    def get_confidence(time_steps, allEmotions):
         """ Compute the confidence across the previous time_steps """
 
         # Awkward transformation of the microsoft visual api to a list of confidence values / emotions
-        allEmotionsList = [list(e) for e in list(self.allEmotions)]
+        allEmotionsList = [list(e) for e in list(allEmotions)]
 
         list_all_emotions = [[list(list(i)[j])[0] for j in range(len(i))] for i in allEmotionsList][0]
         list_metrics = [[list(list(i)[j])[1] for j in range(len(i))] for i in allEmotionsList]
