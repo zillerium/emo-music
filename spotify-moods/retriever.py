@@ -4,6 +4,7 @@ import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
 import pandas as pd
+import mysql.connector
 
 from config import *
 
@@ -95,11 +96,12 @@ def store_songs(terms, dbfile, total_playlists = 1):
             playlists = [(x['uri'], x['owner']['id']) for x in playlists['playlists']['items']]
             for playlist in playlists:
                 n_playlists += 1
-                
+                print playlist
                 # Make sure we don't iterate through playlists already in the DB
                 if playlist[0] not in analyzed:                
                     analyzed.add(playlist[0])
                     songs = get_songs(sp, playlist)
+                    print songs
                     if songs and len(songs) > 0:
                         df = pd.DataFrame(songs)
                         df.drop_duplicates(inplace = True)
@@ -107,13 +109,32 @@ def store_songs(terms, dbfile, total_playlists = 1):
                         print "[Term: %s] Have retrieved %d songs from %d playlists" % \
                         (term, nsongs, n_playlists)                
                         df['term'] = term
-                        conn = sqlite3.connect(dbfile)
-                        df.to_sql("songs", conn, if_exists = "append")
-                        conn.close()
+                        #conn = dbfile
+                        #cursor = conn.cursor()
+                        #cursor.execute("DROP TABLE songs IF EXISTS")
+                        #cursor.execute("""CREATE TABLE songs (name VARCHAR(100), )""")
+                        #with cursor.execute("INSERT INTO SalesLT.Product (Name, ProductNumber, Color, StandardCost, ListPrice, SellStartDate) OUTPUT INSERTED.ProductID VALUES ('BrandNewProduct', '200989', 'Blue', 75, 80, '7/1/2016')"): 
+                        print 'Successfuly Inserted!' 
+                        #conn.commit()
+                        print df
+                        #df.to_sql("songs", conn, if_exists = "append")
+                        #conn.close()
     
 if __name__ == "__main__":
     import sys
-    dbfile = sys.argv[1]
+    import pyodbc
+    #from mysql.connector import errorcode
+
+    server = 'emusicserver1.database.windows.net'
+    database = 'EMusic'
+    username = 'emusic_admin'
+    password = 'Pa$$word2017'
+    driver = '{ODBC Driver 13 for SQL Server}'
+    
+    #dbfile = pyodbc.connect('DRIVER='+driver+';PORT=1433;SERVER='+server+';PORT=1443;DATABASE='+database+';UID='+username+';PWD='+ password)
+    print 'Attempting to write to db'
     terms = sys.argv[2:]
     total_number = 100000
-    store_songs(terms, dbfile, total_number)
+    store_songs(terms, '', total_number)
+    #dbfile.close()
+

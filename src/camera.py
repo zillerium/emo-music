@@ -2,15 +2,25 @@ import cv2
 import logging
 import time
 import ast
+import sys
+import os 
+
+# Get current working directory
+cwd = os.getcwd() 
+# Attach the path of the flask folder in the current working directory
+sys.path.append(cwd + '/flask_live_charts')
+# Import the py script from flask directory. 
+import flask_live_chart as flc
+#from flask_live_charts import live_data
 from get_face import get_attributes
 import cognitive_face as CF
-from  flask_live_charts/flask_live_charts import live_data
+#from  flask_live_charts/flask_live_charts import live_data
 
 logger = logging.getLogger()
 hdlr = logging.FileHandler('./log.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
-logger.addHandler(hdlr) 
+logger.addHandler(hdlr)
 logger.setLevel(logging.DEBUG)
 
 KEY = '6c6706553c864529901bddd38b1fb24d'  # Replace with a valid Subscription Key here.
@@ -88,9 +98,9 @@ class VideoCamera(object):
         if len(out_dict) > 0:
             print "Persisted prediction"
             emotions_dict = self.get_confidence(time_steps=steps, allEmotions=out_dict)
-
+            print(emotions_dict)
             # Visulises the mood. 
-            live_data(emotions_dict)
+            flc.live_data(emotions_dict)
 
 
 
